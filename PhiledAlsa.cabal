@@ -1,6 +1,6 @@
-name:                PhiledAlsa
+name:                Alsa
 version:             0.1.0.0
-synopsis:            Rudimentary Alsa bindings
+synopsis:            Simple Wrapper to ALSA API
 license:             MIT
 license-file:        LICENSE
 author:              Phil Scott
@@ -14,3 +14,5 @@ library
   other-extensions:    ForeignFunctionInterface, GeneralizedNewtypeDeriving
   build-depends:       base >=4.8 && <4.9, mtl >=2.2 && <2.3
   default-language:    Haskell2010
+  includes:            alsa/asoundlib.h
+  extra-libraries:     asound
