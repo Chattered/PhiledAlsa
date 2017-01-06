@@ -87,12 +87,12 @@ safeAlsa errNo = liftIO $ throwIO . userError =<< peekCString =<< strError errNo
 alloca :: Storable a => ContT r IO (Ptr a)
 alloca = ContT C.alloca
 
-getMixer :: IO MixerPtr
-getMixer = flip runContT return $ do
+getMixer :: String -> IO MixerPtr
+getMixer name = flip runContT return $ do
   mptr  <- alloca
   safeAlsa =<< openMixer mptr 0
   mixer <- liftIO $ peek mptr
-  safeAlsa <=< attach mixer <=< liftIO . newCString $ "default"
+  safeAlsa <=< attach mixer <=< liftIO . newCString $ name
   safeAlsa <=< register $ mixer
   safeAlsa <=< load     $ mixer
   return mixer
@@ -139,9 +139,9 @@ switchOn :: Elem -> Integer -> Alsa ()
 switchOn (Elem e) n =
   Alsa $ safeAlsa =<< setSwitch' e (fromIntegral n) 1
 
-runAlsa :: Alsa a -> IO a
-runAlsa (Alsa alsa) = do
-  mixer <- getMixer
+runAlsa :: String -> Alsa a -> IO a
+runAlsa name (Alsa alsa) = do
+  mixer <- getMixer name
   x <- runReaderT alsa mixer
   safeAlsa =<< closeMixer mixer
   return x
