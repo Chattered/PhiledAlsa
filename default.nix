@@ -7,7 +7,7 @@ let
   myhaskell = pkgs.haskellPackages.ghcWithPackages (p: with p;
   [ base mtl cabal-install ]);
 in with pkgs; stdenv.mkDerivation {
-  name = "mtop";
+  name = "PhiledAlsa";
   buildInputs = [ myemacs myhaskell alsaLib ];
   shellHook = ''
     emacs-tcp PhilAlsa .emacs
